@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quiz_brain.dart';
 
 QuizBrain quizBrain = QuizBrain();
@@ -33,21 +34,43 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Widget> scoreKeeper = [];
   void addScoreIcon(bool correctAns, bool userAns) {
-    if (correctAns == userAns) {
-      scoreKeeper.add(
-        Icon(
-          Icons.check,
-          color: Colors.green,
-        ),
-      );
-    } else {
-      scoreKeeper.add(
-        Icon(
-          Icons.close,
-          color: Colors.red,
-        ),
-      );
-    }
+    setState(() {
+      if (quizBrain.isFinished()) {
+        Alert(
+          context: context,
+          title: "Congratulations!!",
+          desc: "You have finished the quiz...",
+          buttons: [
+            DialogButton(
+                child: Text("Cancel"),
+                onPressed: () {
+                  setState(() {
+                    quizBrain.resetQno();
+                    scoreKeeper.clear();
+                    Navigator.pop(context);
+                  });
+                })
+          ],
+        ).show();
+      } else {
+        if (correctAns == userAns) {
+          scoreKeeper.add(
+            Icon(
+              Icons.check,
+              color: Colors.green,
+            ),
+          );
+        } else {
+          scoreKeeper.add(
+            Icon(
+              Icons.close,
+              color: Colors.red,
+            ),
+          );
+        }
+        quizBrain.nextQue();
+      }
+    });
   }
 
   @override
@@ -89,11 +112,7 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 //The user picked true.
                 bool correctAns = quizBrain.getQueAns();
-
-                setState(() {
-                  addScoreIcon(correctAns, true);
-                  quizBrain.nextQue();
-                });
+                addScoreIcon(correctAns, true);
               },
             ),
           ),
@@ -115,11 +134,7 @@ class _QuizPageState extends State<QuizPage> {
               onPressed: () {
                 //The user picked false.
                 bool correctAns = quizBrain.getQueAns();
-
-                setState(() {
-                  addScoreIcon(correctAns, false);
-                  quizBrain.nextQue();
-                });
+                addScoreIcon(correctAns, false);
               },
             ),
           ),
