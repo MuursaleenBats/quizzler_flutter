@@ -46,7 +46,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(5.0),
             child: Center(
               child: Text(
-                quizBrain.q[trackQuestion].queText,
+                quizBrain.getQueText(trackQuestion),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -72,7 +72,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
-                bool correctAns = quizBrain.q[trackQuestion].queAns;
+                bool correctAns = quizBrain.getQueAns(trackQuestion);
                 if (correctAns == true) {
                   print("Correct");
                 } else {
@@ -101,7 +101,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked false.
-                bool correctAns = quizBrain.q[trackQuestion].queAns;
+                bool correctAns = quizBrain.getQueAns(trackQuestion);
                 if (correctAns == false) {
                   print("Correct");
                 } else {
